@@ -7,17 +7,13 @@ settings:
 importers:
 
   .:
-    dependencies:
-      '@carbonteq/fp':
-        specifier: ^0.7.0
-        version: 0.7.0
-      zod:
-        specifier: ^3.25.0
-        version: 3.25.7
     devDependencies:
       '@biomejs/biome':
         specifier: ^1.8.3
         version: 1.9.4
+      '@carbonteq/fp':
+        specifier: ^0.7.0
+        version: 0.7.0
       '@changesets/cli':
         specifier: ^2.29.4
         version: 2.29.4
@@ -48,6 +44,9 @@ importers:
       typescript:
         specifier: ^5.8.3
         version: 5.8.3
+      zod:
+        specifier: ^3.25.7
+        version: 3.25.7
 
 packages:
 

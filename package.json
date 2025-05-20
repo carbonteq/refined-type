@@ -9,19 +9,27 @@
   "license": "MIT",
   "type": "module",
   "exports": {
-    "node": {
+    ".": {
       "types": "./dist/index.d.ts",
       "require": "./dist/index.cjs",
       "import": "./dist/index.js"
+    },
+    "./core": {
+      "types": "./dist/core.d.ts",
+      "require": "./dist/core.cjs",
+      "import": "./dist/core.js"
+    },
+    "./predefined": {
+      "types": "./dist/predefined.d.ts",
+      "require": "./dist/predefined.cjs",
+      "import": "./dist/predefined.js"
     }
   },
-  "files": [
-    "/dist"
-  ],
+  "files": ["/dist"],
   "scope": "@carbonteq",
   "repository": {
     "type": "git",
-    "url": "https://github.com/carbonteq/refined-type"
+    "url": "git+https://github.com/carbonteq/refined-type.git"
   },
   "bugs": {
     "url": "https://github.com/carbonteq/refined-type/issues"
@@ -37,7 +45,7 @@
     "lint:fix": "biome check src tests --write --unsafe",
     "fmt:dry": "biome format src tests",
     "fmt": "biome format src tests --write",
-    "tc": "tsc --pretty --noEmit --project tsconfig.build.json",
+    "tc": "tsc --pretty --noEmit --project tsconfig.json",
     "build": "NODE_ENV=production tsdown",
     "bd": "tsdown",
     "dev": "tsdown --watch",
@@ -48,6 +56,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^1.8.3",
+    "@carbonteq/fp": "^0.7.0",
     "@changesets/cli": "^2.29.4",
     "@microsoft/api-extractor": "^7.52.8",
     "@swc/core": "^1.11.24",
@@ -57,7 +66,8 @@
     "jsr": "^0.13.4",
     "tsdown": "^0.11.12",
     "tsx": "^4.19.4",
-    "typescript": "^5.8.3"
+    "typescript": "^5.8.3",
+    "zod": "^3.25.7"
   },
   "engines": {
     "node": ">=18.0.0",
@@ -65,11 +75,8 @@
     "yarn": ">=1.22.0"
   },
   "packageManager": "pnpm@10.11.0+sha512.6540583f41cc5f628eb3d9773ecee802f4f9ef9923cc45b69890fb47991d4b092964694ec3a4f738a420c918a333062c8b925d312f42e4f0c263eb603551f977",
-  "dependencies": {
-    "@carbonteq/fp": "^0.7.0",
-    "zod": "^3.25.0"
-  },
   "peerDependencies": {
-    "zod": "^3.25.0"
+    "@carbonteq/fp": "^0.7.0",
+    "zod": "^3.25.7"
   }
 }

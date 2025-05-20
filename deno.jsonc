@@ -6,6 +6,9 @@
   },
   "exports": "./src/index.ts",
   "imports": {
-    "@/": "./src/"
+    "@/": "./src/",
+    "@carbonteq/refined-type/": "./dist/",
+    "zod": "npm:zod@^3.25.7",
+    "@carbonteq/fp": "npm:@carbonteq/fp@0.7.0"
   }
 }
