@@ -43,3 +43,4 @@ tsconfig.build.tsbuildinfo
 lib
 tmp.ts
 dist
+testit.ts
