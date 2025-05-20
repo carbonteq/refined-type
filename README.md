@@ -277,9 +277,9 @@ const personSchema = z.object({
 
 // Define the type using our refined types
 type Person = {
-  name:  Name.$infer;
-  age:  Age.$infer;
-  email:  Email.$infer;
+  name: typeof Name;
+  age:  typeof Age;
+  email: typeof Email;
 };
 
 // Validate an entire object with multiple refined types
