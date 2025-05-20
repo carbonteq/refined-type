@@ -295,7 +295,7 @@ function createPerson(data: unknown): Result<Person, Error> {
 
 
 ## Installation
-
+* @carbonteq/fp  and zod are dependencies thus need to be installed
 ```bash
 # NPM
 npm install @carbonteq/refined-type @carbonteq/fp zod
