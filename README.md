@@ -3,6 +3,7 @@
 [![npm version](https://img.shields.io/npm/v/@carbonteq/refined-type.svg)](https://www.npmjs.com/package/@carbonteq/refined-type)
 [![license](https://img.shields.io/npm/l/@carbonteq/refined-type.svg)](https://github.com/carbonteq/refined-type/blob/main/LICENSE)
 [![TypeScript](https://img.shields.io/badge/%3C%2F%3E-TypeScript-%230074c1.svg)](https://www.typescriptlang.org/)
+[![Linted with Biome](https://img.shields.io/badge/Linted_with-Biome-60a5fa?style=flat&logo=biome)](https://biomejs.dev)
 
 > 🛡️ Type-safe, runtime-validated, and nominally-typed primitives for TypeScript, built on Zod.
 
@@ -145,7 +146,7 @@ All these approaches suffer from common problems:
 
 ```typescript
 import { createRefinedType } from '@carbonteq/refined-type';
-import * as z from 'zod';
+import * as z from 'zod/v4';
 
 // Create a refined Email type with built-in validation
 const Email = createRefinedType('Email', z.string().email());
@@ -184,7 +185,7 @@ if (invalidResult.isErr()) {
 ```typescript
 import { createRefinedType, RefinedValidationError } from '@carbonteq/refined-type';
 import { Result } from '@carbonteq/fp';
-import * as z from 'zod';
+import * as z from 'zod/v4';
 
 // Define domain-specific error type
 class InvalidUserIdError extends RefinedValidationError {
@@ -222,7 +223,7 @@ function fetchUser(id: unknown): Result<User, InvalidUserIdError | ApiError> {
 ```typescript
 import { createRefinedType, Unbrand } from '@carbonteq/refined-type';
 import { Result } from '@carbonteq/fp';
-import * as z from 'zod';
+import * as z from 'zod/v4';
 
 // Define a refined number type for positive numbers
 const PositiveNumber = createRefinedType(
@@ -260,7 +261,7 @@ const total = totalResult.unwrapOr(0);
 ```typescript
 import { createRefinedType } from '@carbonteq/refined-type';
 import { Result } from '@carbonteq/fp';
-import * as z from 'zod';
+import * as z from 'zod/v4';
 
 // Create domain-specific types
 const Name = createRefinedType('Name', z.string().min(2).max(50));
@@ -276,9 +277,9 @@ const personSchema = z.object({
 
 // Define the type using our refined types
 type Person = {
-  name: typeof Name.$infer;
-  age: typeof Age.$infer;
-  email: typeof Email.$infer;
+  name:  Name.$infer;
+  age:  Age.$infer;
+  email:  Email.$infer;
 };
 
 // Validate an entire object with multiple refined types
@@ -311,6 +312,7 @@ pnpm add @carbonteq/refined-type @carbonteq/fp zod
 - Node.js >= 18
 - TypeScript >= 4.9
 - Zod >= 3.25.0
+- @carbonteq/fp >= 0.7.0
 
 
 ## License
