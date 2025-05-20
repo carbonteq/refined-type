@@ -1,0 +1,73 @@
+{
+  "name": "@carbonteq/refined-type",
+  "version": "0.0.0",
+  "description": "Refined types built over Zod",
+  "author": "Arslan <rslnkrmt2552@gmail.com>",
+  "main": "lib/index.js",
+  "module": "lib/index.mjs",
+  "types": "lib/index.d.ts",
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    "node": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": ["/dist"],
+  "scope": "@carbonteq",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/carbonteq/refined-type"
+  },
+  "bugs": {
+    "url": "https://github.com/carbonteq/refined-type/issues"
+  },
+  "homepage": "https://github.com/carbonteq/refined-type#readme",
+  "sideEffects": false,
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "scripts": {
+    "lint": "biome check src tests",
+    "lint:fix": "biome check src tests --write --unsafe",
+    "fmt:dry": "biome format src tests",
+    "fmt": "biome format src tests --write",
+    "tc": "tsc --pretty --noEmit --project tsconfig.build.json",
+    "build": "NODE_ENV=production tsdown",
+    "bd": "tsdown",
+    "dev": "tsdown --watch",
+    "test": "tsx --test tests/*.test.ts",
+    "test:dbg": "tsx --inspect-brk --test tests/*.test.ts",
+    "release": "changeset publish",
+    "tag": "changeset tag"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.8.3",
+    "@changesets/cli": "^2.29.4",
+    "@microsoft/api-extractor": "^7.52.8",
+    "@swc/core": "^1.11.24",
+    "@tsconfig/node20": "^20.1.5",
+    "@types/node": "^20.14.9",
+    "changesets": "^1.0.2",
+    "jsr": "^0.13.4",
+    "tsdown": "^0.11.12",
+    "tsx": "^4.19.4",
+    "typescript": "^5.8.3"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0",
+    "yarn": ">=1.22.0"
+  },
+  "packageManager": "pnpm@10.11.0+sha512.6540583f41cc5f628eb3d9773ecee802f4f9ef9923cc45b69890fb47991d4b092964694ec3a4f738a420c918a333062c8b925d312f42e4f0c263eb603551f977",
+  "dependencies": {
+    "@carbonteq/fp": "^0.7.0",
+    "zod": "^3.25.0"
+  },
+  "peerDependencies": {
+    "zod": "^3.25.0"
+  }
+}
