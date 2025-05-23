@@ -2,22 +2,32 @@
   "$schema": "https://raw.githubusercontent.com/hougesen/mdsf/main/schemas/v0.9.5/mdsf.schema.json",
   "format_finished_document": false,
   "javascript_runtime": "node",
-  "on_missing_tool_binary": "fail-fast",
   "on_missing_language_definition": "fail",
+  "on_missing_tool_binary": "fail",
   "runners": {
     "bunx": true,
     "uv": true
   },
+  "language_aliases": {
+    "bash": "shell",
+    "js": "jts",
+    "javascript": "jts",
+    "rs": "rust",
+    "sh": "shell",
+    "ts": "jts",
+    "typescript": "jts",
+    "zsh": "shell",
+    "jsonc": "json"
+  },
   "languages": {
-    "css": [["biome:format", "stylelint"]],
+    "c": ["clang-format"],
+    "css": [["biome:check:unsafe", "stylelint"]],
     "html": [["superhtml:fmt", "djlint"]],
-    "javascript": ["biome:check:unsafe"],
-    "json": ["biome:format"],
-    "jsonc": ["biome:format"],
+    "jts": ["biome:check:unsafe"],
+    "json": ["biome:check:unsafe"],
+    "rust": ["rustfmt"],
+    "scss": ["prettier"],
     "shell": [["shfmt", "beautysh"]],
-    "sh": [["shfmt", "beautysh"]],
-    "bash": [["shfmt"]],
-    "typescript": ["biome:check:unsafe"],
-    "yaml": [["prettier", "yamlfmt", "yamlfix"]]
+    "yaml": [["deno:fmt", "yamlfmt", "yamlfix"]]
   }
 }

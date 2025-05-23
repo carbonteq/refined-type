@@ -5,17 +5,22 @@
 [![TypeScript](https://img.shields.io/badge/%3C%2F%3E-TypeScript-%230074c1.svg)](https://www.typescriptlang.org/)
 [![Linted with Biome](https://img.shields.io/badge/Linted_with-Biome-60a5fa?style=flat&logo=biome)](https://biomejs.dev)
 
-> 🛡️ Type-safe, runtime-validated, and nominally-typed primitives for TypeScript, built on Zod.
+> 🛡️ Type-safe, runtime-validated, and nominally-typed primitives for
+> TypeScript, built on Zod.
 
 ## Motivation: Refined Types and Branded Types
 
-**Refined types** and **branded types** address a fundamental challenge in TypeScript development: the inability to distinguish between primitive types that represent different semantic concepts.
+**Refined types** and **branded types** address a fundamental challenge in
+TypeScript development: the inability to distinguish between primitive types
+that represent different semantic concepts.
 
 ### The Problem
 
 In TypeScript's structural type system:
 
-1. **Type Safety Gaps**: TypeScript's primitive types (`string`, `number`, etc.) don't prevent logical errors like passing an email to a URL parameter, confusing different string IDs, or mixing measurement units.
+1. **Type Safety Gaps**: TypeScript's primitive types (`string`, `number`, etc.)
+   don't prevent logical errors like passing an email to a URL parameter,
+   confusing different string IDs, or mixing measurement units.
 
    ```typescript
    // These are all just strings to TypeScript!
@@ -28,17 +33,23 @@ In TypeScript's structural type system:
    sendEmail(userId, subject); // Oops, wrong string type
    ```
 
-2. **No Runtime Type Guarantees**: TypeScript's static type system is erased at runtime, allowing invalid values to pass through if they match the expected structure.
+2. **No Runtime Type Guarantees**: TypeScript's static type system is erased at
+   runtime, allowing invalid values to pass through if they match the expected
+   structure.
 
-3. **Lack of Nominal Typing**: TypeScript cannot natively differentiate between structurally identical types with different semantic meanings (email vs. username vs. password).
+3. **Lack of Nominal Typing**: TypeScript cannot natively differentiate between
+   structurally identical types with different semantic meanings (email vs.
+   username vs. password).
 
-4. **Validation Fragmentation**: Developers end up duplicating validation logic across the codebase, often inconsistently.
+4. **Validation Fragmentation**: Developers end up duplicating validation logic
+   across the codebase, often inconsistently.
 
 ### What are Refined and Branded Types?
 
-- **Refined Types**: Types with associated runtime validations that ensure values satisfy specific constraints or predicates.
-  
-- **Branded Types**: Types that are "branded" with a unique tag to make them nominally distinct despite having the same underlying structure.
+- **Refined Types**: Types with associated runtime validations that ensure
+  values satisfy specific constraints or predicates.
+- **Branded Types**: Types that are "branded" with a unique tag to make them
+  nominally distinct despite having the same underlying structure.
 
   ```typescript
   // Without branding:
@@ -55,9 +66,10 @@ In TypeScript's structural type system:
 
 ### Traditional Branded Types in TypeScript
 
-Developers have traditionally created branded types using a variety of techniques, each with significant drawbacks:
+Developers have traditionally created branded types using a variety of
+techniques, each with significant drawbacks:
 
-#### 1. Using declaration merging and interfaces:
+#### 1. Using declaration merging and interfaces
 
 ```typescript
 // Approach 1: Using interfaces
@@ -72,7 +84,7 @@ type Email = string & EmailBrand;
 const email = "invalid-email" as Email; // Compiles fine! 😱
 ```
 
-#### 2. Using opaque types with private symbols:
+#### 2. Using opaque types with private symbols
 
 ```typescript
 // Approach 2: Using symbols
@@ -88,7 +100,7 @@ const asEmail = (str: string): Email => str as Email;
 const email = asEmail("not-valid"); // No error!
 ```
 
-#### 3. Using class-based wrappers:
+#### 3. Using class-based wrappers
 
 ```typescript
 // Approach 3: Class wrapper
@@ -123,19 +135,27 @@ All these approaches suffer from common problems:
 
 ## Our Solution
 
-`@carbonteq/refined-type` elegantly combines both approaches to create a comprehensive solution:
+`@carbonteq/refined-type` elegantly combines both approaches to create a
+comprehensive solution:
 
-1. **Zod Integration**: Leverages Zod's powerful validation capabilities for comprehensive runtime checks with excellent error reporting.
+1. **Zod Integration**: Leverages Zod's powerful validation capabilities for
+   comprehensive runtime checks with excellent error reporting.
 
-2. **Nominal Type Safety**: Uses TypeScript's branded types to create true nominal distinctions between types.
+2. **Nominal Type Safety**: Uses TypeScript's branded types to create true
+   nominal distinctions between types.
 
-3. **Result-based API**: Implements a functional `Result<T, E>` type from `@carbonteq/fp` that eliminates exceptions and enables elegant error handling.
+3. **Result-based API**: Implements a functional `Result<T, E>` type from
+   `@carbonteq/fp` that eliminates exceptions and enables elegant error
+   handling.
 
-4. **Developer Experience**: Provides intuitive helper types and utilities for seamless integration into any TypeScript project.
+4. **Developer Experience**: Provides intuitive helper types and utilities for
+   seamless integration into any TypeScript project.
 
-5. **Custom Error Handling**: Supports domain-specific error transformations to create meaningful error messages for your business logic.
+5. **Custom Error Handling**: Supports domain-specific error transformations to
+   create meaningful error messages for your business logic.
 
-6. **Zero Runtime Overhead**: No performance penalties for primitive operations after validation.
+6. **Zero Runtime Overhead**: No performance penalties for primitive operations
+   after validation.
 
 ## Key Features
 
@@ -307,10 +327,10 @@ function createPerson(data: unknown): Result<Person, Error> {
 }
 ```
 
-
-
 ## Installation
-* @carbonteq/fp  and zod are dependencies thus need to be installed
+
+- @carbonteq/fp and zod are dependencies thus need to be installed
+
 ```bash
 # NPM
 npm install @carbonteq/refined-type @carbonteq/fp zod
@@ -328,7 +348,6 @@ pnpm add @carbonteq/refined-type @carbonteq/fp zod
 - TypeScript >= 4.9
 - Zod >= 3.25.0
 - @carbonteq/fp >= 0.7.0
-
 
 ## License
 
