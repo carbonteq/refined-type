@@ -19,11 +19,13 @@ In TypeScript's structural type system:
 
    ```typescript
    // These are all just strings to TypeScript!
-   function sendEmail(to: string, subject: string) { /* ... */ }
+   function sendEmail(to: string, subject: string) {
+     /* ... */
+   }
    
    // Nothing prevents these dangerous mistakes:
    sendEmail(subject, emailAddress); // Oops, parameters swapped
-   sendEmail(userId, subject);       // Oops, wrong string type
+   sendEmail(userId, subject); // Oops, wrong string type
    ```
 
 2. **No Runtime Type Guarantees**: TypeScript's static type system is erased at runtime, allowing invalid values to pass through if they match the expected structure.
@@ -43,8 +45,10 @@ In TypeScript's structural type system:
   type UserId = string;
   type PostId = string;
   
-  // TypeScript sees these as identical: 
-  function getPost(id: PostId) { /* ... */ }
+  // TypeScript sees these as identical:
+  function getPost(id: PostId) {
+    /* ... */
+  }
   const userId: UserId = "user-123";
   getPost(userId); // No error! 😱
   ```
@@ -57,7 +61,9 @@ Developers have traditionally created branded types using a variety of technique
 
 ```typescript
 // Approach 1: Using interfaces
-interface EmailBrand { readonly __brand: unique symbol }
+interface EmailBrand {
+  readonly __brand: unique symbol;
+}
 type Email = string & EmailBrand;
 
 // Problems:
@@ -87,10 +93,10 @@ const email = asEmail("not-valid"); // No error!
 ```typescript
 // Approach 3: Class wrapper
 class Email {
-  private __brand: void;
+  private __brand: undefined;
   constructor(public readonly value: string) {
     // Maybe some validation, but must use try/catch
-    if (!value.includes('@')) throw new Error('Invalid email');
+    if (!value.includes("@")) throw new Error("Invalid email");
   }
 }
 
@@ -145,11 +151,11 @@ All these approaches suffer from common problems:
 ### Basic Usage
 
 ```typescript
-import { createRefinedType } from '@carbonteq/refined-type';
-import * as z from 'zod/v4';
+import { createRefinedType } from "@carbonteq/refined-type";
+import * as z from "zod/v4";
 
 // Create a refined Email type with built-in validation
-const Email = createRefinedType('Email', z.string().email());
+const Email = createRefinedType("Email", z.string().email());
 type Email = typeof Email.$infer; // Get the branded type
 
 // === Type Safety ===
@@ -159,20 +165,22 @@ type Email = typeof Email.$infer; // Get the branded type
 
 // === Runtime Validation ===
 // Safe creation with validation
-const emailResult = Email.create('user@example.com');
+const emailResult = Email.create("user@example.com");
 if (emailResult.isOk()) {
   const validEmail = emailResult.unwrap();
   sendEmail(validEmail); // validEmail is branded and type-safe
-  
+
   // Functions requiring Email type will only accept valid emails
-  function sendEmail(to: Email) { /* ... */ }
-  
+  function sendEmail(to: Email) {
+    /* ... */
+  }
+
   // This won't compile - string is not assignable to Email
   // sendEmail("some-string@example.com"); // Error!
 }
 
 // === Error Handling ===
-const invalidResult = Email.create('not-an-email');
+const invalidResult = Email.create("not-an-email");
 if (invalidResult.isErr()) {
   // Structured error handling
   console.error(invalidResult.unwrapErr().message);
@@ -183,24 +191,27 @@ if (invalidResult.isErr()) {
 ### Custom Error Types
 
 ```typescript
-import { createRefinedType, RefinedValidationError } from '@carbonteq/refined-type';
-import { Result } from '@carbonteq/fp';
-import * as z from 'zod/v4';
+import { Result } from "@carbonteq/fp";
+import {
+  RefinedValidationError,
+  createRefinedType,
+} from "@carbonteq/refined-type";
+import * as z from "zod/v4";
 
 // Define domain-specific error type
 class InvalidUserIdError extends RefinedValidationError {
   constructor(data: unknown, err: z.ZodError) {
     super(err);
-    this.name = 'InvalidUserIdError';
+    this.name = "InvalidUserIdError";
     this.message = `Invalid user ID: ${data}. Must be a valid UUID.`;
   }
 }
 
 // Create a UserId type with custom error handling
 const UserId = createRefinedType(
-  'UserId',
+  "UserId",
   z.string().uuid(),
-  (data, err) => new InvalidUserIdError(data, err)
+  (data, err) => new InvalidUserIdError(data, err),
 );
 type UserId = typeof UserId.$infer;
 
@@ -208,11 +219,11 @@ type UserId = typeof UserId.$infer;
 function fetchUser(id: unknown): Result<User, InvalidUserIdError | ApiError> {
   // Validate and create UserId first
   const userIdResult = UserId.create(id);
-  
+
   if (userIdResult.isErr()) {
     return Result.Err(userIdResult.unwrapErr());
   }
-  
+
   const userId = userIdResult.unwrap();
   return api.getUser(userId);
 }
@@ -221,14 +232,14 @@ function fetchUser(id: unknown): Result<User, InvalidUserIdError | ApiError> {
 ### Working with Primitive Values
 
 ```typescript
-import { createRefinedType, Unbrand } from '@carbonteq/refined-type';
-import { Result } from '@carbonteq/fp';
-import * as z from 'zod/v4';
+import { Result } from "@carbonteq/fp";
+import { type Unbrand, createRefinedType } from "@carbonteq/refined-type";
+import * as z from "zod/v4";
 
 // Define a refined number type for positive numbers
 const PositiveNumber = createRefinedType(
-  'PositiveNumber',
-  z.number().positive()
+  "PositiveNumber",
+  z.number().positive(),
 );
 type PositiveNumber = typeof PositiveNumber.$infer;
 
@@ -236,11 +247,14 @@ type PositiveNumber = typeof PositiveNumber.$infer;
 type UnbrandedNumber = Unbrand<PositiveNumber>; // Plain number
 
 // Converting back to primitive when needed
-function calculateTotal(price: PositiveNumber, quantity: PositiveNumber): number {
+function calculateTotal(
+  price: PositiveNumber,
+  quantity: PositiveNumber,
+): number {
   // Access the primitive values
   const priceValue = PositiveNumber.primitive(price);
   const quantityValue = PositiveNumber.primitive(quantity);
-  
+
   return priceValue * quantityValue;
 }
 
@@ -249,8 +263,9 @@ const priceResult = PositiveNumber.create(29.99);
 const quantityResult = PositiveNumber.create(3);
 
 // Use Result combinators for elegant handling
-const totalResult = Result.CombineResults([priceResult, quantityResult])
-  .map(([price, quantity]) => calculateTotal(price, quantity));
+const totalResult = Result.CombineResults([priceResult, quantityResult]).map(
+  ([price, quantity]) => calculateTotal(price, quantity),
+);
 
 // Safe unwrapping
 const total = totalResult.unwrapOr(0);
@@ -259,14 +274,14 @@ const total = totalResult.unwrapOr(0);
 ### Complex Composition
 
 ```typescript
-import { createRefinedType } from '@carbonteq/refined-type';
-import { Result } from '@carbonteq/fp';
-import * as z from 'zod/v4';
+import { Result } from "@carbonteq/fp";
+import { createRefinedType } from "@carbonteq/refined-type";
+import * as z from "zod/v4";
 
 // Create domain-specific types
-const Name = createRefinedType('Name', z.string().min(2).max(50));
-const Age = createRefinedType('Age', z.number().int().min(0).max(120));
-const Email = createRefinedType('Email', z.string().email());
+const Name = createRefinedType("Name", z.string().min(2).max(50));
+const Age = createRefinedType("Age", z.number().int().min(0).max(120));
+const Email = createRefinedType("Email", z.string().email());
 
 // Compose them into a schema
 const personSchema = z.object({
@@ -278,7 +293,7 @@ const personSchema = z.object({
 // Define the type using our refined types
 type Person = {
   name: typeof Name;
-  age:  typeof Age;
+  age: typeof Age;
   email: typeof Email;
 };
 

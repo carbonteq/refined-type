@@ -1,2 +1,7 @@
 [tools]
 node = "20"
+"ubi:hougesen/mdsf" = "latest"
+
+[tasks]
+mdfmt = "mdsf format *.md"
+mdlint = "mdsf verify *.md"

@@ -1,15 +1,23 @@
 {
-  "$schema": "https://raw.githubusercontent.com/hougesen/mdsf/main/schemas/v0.3.1/mdsf.schema.json",
+  "$schema": "https://raw.githubusercontent.com/hougesen/mdsf/main/schemas/v0.9.5/mdsf.schema.json",
   "format_finished_document": false,
   "javascript_runtime": "node",
+  "on_missing_tool_binary": "fail-fast",
+  "on_missing_language_definition": "fail",
+  "runners": {
+    "bunx": true,
+    "uv": true
+  },
   "languages": {
-    "css": [["prettier", "stylelint"]],
-    "html": [["prettier", "djlint"]],
-    "javascript": ["biome:format"],
+    "css": [["biome:format", "stylelint"]],
+    "html": [["superhtml:fmt", "djlint"]],
+    "javascript": ["biome:check:unsafe"],
     "json": ["biome:format"],
+    "jsonc": ["biome:format"],
     "shell": [["shfmt", "beautysh"]],
     "sh": [["shfmt", "beautysh"]],
-    "typescript": ["biome:format"],
+    "bash": [["shfmt"]],
+    "typescript": ["biome:check:unsafe"],
     "yaml": [["prettier", "yamlfmt", "yamlfix"]]
   }
 }
